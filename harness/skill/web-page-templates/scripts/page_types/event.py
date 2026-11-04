@@ -1,0 +1,146 @@
+"""
+페이지 유형: 이벤트·프로모션 — 시즌 세일 행사 페이지
+구성: 카운트다운, 선착순 쿠폰, 참여 방법, 응모 폼, 유의 사항
+
+단독 실행:  python3 scripts/page_types/event.py > event.html
+전체 생성:  python3 scripts/build.py event --out ./site
+"""
+import datetime  # noqa: F401  (날짜 계산에 쓰는 유형이 있습니다)
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from common import FONT, SERIF, page, won  # noqa: E402,F401
+
+EVENT_CSS = """
+body{color:#fff;background:#0c0a09}
+.top{text-align:center;padding:14px;font-size:13px;background:#1c1917;color:#a8a29e}
+.hero{text-align:center;padding:88px 0 72px;background:radial-gradient(circle at 50% 0%,rgba(249,115,22,.35),transparent 60%)}
+.chip{display:inline-block;border:1px solid #f97316;color:#fdba74;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:700;letter-spacing:1px}
+.hero h1{font-size:clamp(44px,9vw,104px);font-weight:900;line-height:1.05;letter-spacing:-3px;margin:20px 0}
+.hero h1 span{background:linear-gradient(90deg,#fde047,#f97316,#ef4444);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#d6d3d1;font-size:18px}
+.period{margin-top:8px;color:#a8a29e;font-size:15px}
+.count{display:flex;justify-content:center;gap:14px;margin:40px 0 12px}
+.count div{background:#1c1917;border:1px solid #292524;border-radius:14px;width:104px;padding:16px 0}
+.count b{display:block;font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;color:#fde047}
+.count span{font-size:13px;color:#a8a29e}
+.count-note{font-size:12px;color:#78716c}
+.cta{display:inline-block;margin-top:32px;background:#f97316;color:#0c0a09;font-weight:800;font-size:18px;padding:18px 44px;border-radius:999px;box-shadow:0 12px 40px -8px rgba(249,115,22,.6)}
+section{padding:72px 0}
+.h2{text-align:center;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.sub{text-align:center;color:#a8a29e;margin-bottom:40px}
+.coupons{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.coupon{position:relative;background:linear-gradient(135deg,#292524,#1c1917);border:1px solid #44403c;border-radius:16px;padding:28px;overflow:hidden}
+.coupon::before,.coupon::after{content:"";position:absolute;right:88px;width:24px;height:24px;border-radius:50%;background:#0c0a09}
+.coupon::before{top:-12px}.coupon::after{bottom:-12px}
+.coupon .amt{font-size:40px;font-weight:900;color:#fde047;letter-spacing:-1px}
+.coupon .cond{color:#a8a29e;font-size:14px}
+.coupon .left{font-size:13px;color:#fdba74;margin-top:12px}
+.bar{height:6px;background:#44403c;border-radius:3px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#f97316,#ef4444)}
+.coupon .get{position:absolute;right:20px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-weight:800;color:#f97316;letter-spacing:4px;font-size:14px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.steps div{background:#1c1917;border-radius:16px;padding:28px;counter-increment:s}
+.steps div::before{content:"STEP " counter(s);display:block;color:#f97316;font-weight:800;font-size:13px;letter-spacing:1px;margin-bottom:10px}
+.steps b{font-size:19px;display:block;margin-bottom:6px}
+.steps span{color:#a8a29e;font-size:15px}
+.form{max-width:520px;margin:0 auto;background:#1c1917;border:1px solid #292524;border-radius:20px;padding:36px}
+.form label{display:block;font-size:14px;color:#d6d3d1;margin:14px 0 6px}
+.form input[type=text],.form input[type=tel],.form select{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #44403c;background:#0c0a09;color:#fff}
+.form .agree{display:flex;gap:8px;align-items:center;margin-top:18px;font-size:14px;color:#a8a29e}
+.form button{width:100%;margin-top:22px;padding:16px;border:0;border-radius:12px;background:#f97316;color:#0c0a09;font-weight:800;font-size:17px;cursor:pointer}
+.notice{max-width:760px;margin:0 auto;color:#a8a29e;font-size:14px}
+.notice li{padding:4px 0}
+.notice li::before{content:"·  "}
+footer{text-align:center;color:#57534e;font-size:13px;padding:40px 0}
+@media(max-width:700px){.steps{grid-template-columns:1fr}.count div{width:76px}.count b{font-size:32px}}
+"""
+
+
+def build_event() -> str:
+    # 이벤트 종료 시각: 생성 시점으로부터 3일 뒤 23:59:59
+    now = datetime.datetime.now()
+    start = now.date() - datetime.timedelta(days=1)
+    end = datetime.datetime.combine(now.date() + datetime.timedelta(days=3), datetime.time(23, 59, 59))
+    left = end - now
+    d, rem = left.days, left.seconds
+    h, m, s = rem // 3600, rem % 3600 // 60, rem % 60
+    count_html = "".join(f"<div><b>{v:02d}</b><span>{u}</span></div>" for v, u in [(d, "일"), (h, "시간"), (m, "분"), (s, "초")])
+
+    coupons = [  # (할인 금액, 최소 주문 금액, 발급 수량, 남은 수량)
+        (5000, 30000, 10000, 3120), (15000, 100000, 5000, 870), (30000, 200000, 1000, 64),
+    ]
+    coupon_html = ""
+    for amt, minimum, total, remain in coupons:
+        used = 100 - round(remain / total * 100)
+        coupon_html += (f'<div class="coupon"><div class="amt">{amt:,}원</div>'
+                        f'<div class="cond">{minimum:,}원 이상 구매 시</div>'
+                        f'<div class="left">남은 수량 {remain:,}장 · {used}% 소진</div>'
+                        f'<div class="bar"><i style="width:{used}%"></i></div><span class="get">받기</span></div>')
+
+    body = f"""
+<div class="top">monomarket 가을 빅세일 · 앱에서 구매하면 추가 5% 적립</div>
+<header class="hero"><div class="wrap">
+  <span class="chip">AUTUMN BIG SALE</span>
+  <h1>가을 빅세일<br><span>최대 70%</span></h1>
+  <p>1년에 한 번, 전 카테고리 인기 상품을 가장 낮은 가격에 만나 보세요.</p>
+  <div class="period">행사 기간 {start:%m월 %d일} – {end:%m월 %d일} 23:59</div>
+  <div class="count">{count_html}</div>
+  <div class="count-note">※ 남은 시간은 페이지를 만든 시각({now:%m/%d %H:%M}) 기준입니다.</div>
+  <a class="cta" href="#">세일 상품 보러 가기</a>
+</div></header>
+
+<section><div class="wrap">
+  <h2 class="h2">선착순 할인 쿠폰</h2><p class="sub">아이디당 쿠폰 종류별로 1장씩 받을 수 있습니다.</p>
+  <div class="coupons">{coupon_html}</div>
+</div></section>
+
+<section><div class="wrap">
+  <h2 class="h2">경품 응모 방법</h2><p class="sub">응모한 분 중 추첨으로 100명에게 적립금 10만 원을 드립니다.</p>
+  <div class="steps">
+    <div><b>쿠폰 받기</b><span>위의 쿠폰 중 하나 이상을 받습니다.</span></div>
+    <div><b>3만 원 이상 구매</b><span>행사 기간 안에 쿠폰을 사용해 구매합니다.</span></div>
+    <div><b>응모서 작성</b><span>아래 응모서에 연락처를 남기면 완료입니다.</span></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <form class="form" action="#">
+    <h2 class="h2" style="font-size:24px">경품 응모하기</h2>
+    <label>이름</label><input type="text" placeholder="홍길동">
+    <label>휴대전화 번호</label><input type="tel" placeholder="010-0000-0000">
+    <label>가장 관심 있는 카테고리</label>
+    <select><option>아우터</option><option>신발</option><option>가방</option><option>리빙</option></select>
+    <label class="agree"><input type="checkbox"> 개인정보 수집·이용에 동의합니다. (필수)</label>
+    <button type="button">응모 완료하기</button>
+  </form>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <ul class="notice">
+    <li>쿠폰은 행사 종료와 함께 자동으로 사라집니다.</li>
+    <li>일부 브랜드 상품에는 쿠폰을 사용할 수 없습니다.</li>
+    <li>당첨자는 {(end + datetime.timedelta(days=7)):%m월 %d일}에 개별 문자로 안내합니다.</li>
+  </ul>
+</div></section>
+<footer>© 2026 monomarket · 이 페이지의 행사 정보는 모두 가상의 예시입니다.</footer>
+"""
+    return page("가을 빅세일 — 이벤트·프로모션 페이지 샘플", EVENT_CSS, body)
+
+
+META = {
+    "key": "event",
+    "file": "event.html",
+    "kind": "이벤트·프로모션",
+    "title": "시즌 세일 행사 페이지",
+    "name": "AUTUMN SALE",
+    "desc": "카운트다운, 선착순 쿠폰, 참여 방법, 응모 폼, 유의 사항",
+    "thumb": "linear-gradient(135deg,#0c0a09,#f97316)",
+}
+build = build_event
+
+if __name__ == "__main__":
+    import common
+    common.SHOW_BACK = False
+    sys.stdout.write(build())

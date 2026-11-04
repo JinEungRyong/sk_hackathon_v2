@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mono admin — 대시보드 홈 샘플</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button,input,select,textarea{font:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.__back{position:fixed;right:16px;bottom:16px;z-index:999;background:#111;color:#fff;
+  font-size:13px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+
+body{color:#0f172a;background:#f1f5f9;font-size:14px}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.side{background:#0f172a;color:#cbd5e1;padding:24px 16px;display:flex;flex-direction:column}
+.side .logo{color:#fff;font-weight:800;font-size:19px;padding:0 10px 28px}
+.side .logo span{color:#60a5fa}
+.side small{font-size:11px;letter-spacing:1px;color:#64748b;padding:16px 10px 8px;display:block}
+.side a{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px}
+.side a.on{background:#1e293b;color:#fff;font-weight:600}
+.side a:hover{background:#1e293b}
+.side .me{margin-top:auto;display:flex;gap:10px;align-items:center;padding:10px;border-top:1px solid #1e293b}
+.side .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#a78bfa)}
+main{padding:28px 32px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.topbar h1{font-size:24px;letter-spacing:-.5px}
+.topbar p{color:#64748b}
+.topbar .r{display:flex;gap:10px}
+.topbar select,.topbar .btn{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:9px 14px}
+.topbar .btn.p{background:#2563eb;color:#fff;border-color:#2563eb;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px}
+.kpi .lab{color:#64748b}
+.kpi .val{font-size:28px;font-weight:800;letter-spacing:-.5px;margin:6px 0}
+.up{color:#16a34a;font-weight:600}
+.down{color:#dc2626;font-weight:600}
+.kpi .vs{color:#94a3b8}
+.row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:4px}
+.card .hint{color:#94a3b8;margin-bottom:20px}
+.chart{display:flex;align-items:flex-end;gap:12px;height:240px;border-bottom:1px solid #e2e8f0;padding:0 4px;position:relative}
+.chart::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to top,#f1f5f9 0 1px,transparent 1px 60px)}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.col i{display:block;width:100%;max-width:36px;background:#bfdbfe;border-radius:6px 6px 0 0}
+.col.last i{background:#2563eb}
+.col em{font-style:normal;font-size:11px;color:#64748b;margin-bottom:4px}
+.months{display:flex;gap:12px;padding:8px 4px 0}
+.months span{flex:1;text-align:center;color:#94a3b8;font-size:12px}
+.donut{width:180px;height:180px;border-radius:50%;margin:8px auto 20px;position:relative}
+.donut::after{content:"";position:absolute;inset:34px;background:#fff;border-radius:50%}
+.donut b{position:absolute;inset:0;display:grid;place-items:center;z-index:1;font-size:15px;text-align:center;line-height:1.3}
+.legend li{display:flex;justify-content:space-between;padding:6px 0}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;color:#64748b;font-weight:500;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc}
+td{padding:12px;border-bottom:1px solid #f1f5f9}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.ok{background:#dcfce7;color:#166534}.pill.ship{background:#dbeafe;color:#1e40af}
+.pill.wait{background:#fef9c3;color:#854d0e}.pill.cancel{background:#fee2e2;color:#991b1b}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}}
+@media(max-width:720px){.app{grid-template-columns:1fr}.side{display:none}main{padding:20px}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side">
+    <div class="logo">mono<span>admin</span></div>
+    <a class="on" href="#">📊 대시보드</a><a href="#">🧾 주문 관리</a><a href="#">📦 상품 관리</a><a href="#">👥 고객 관리</a>
+    <small>마케팅</small>
+    <a href="#">🎟️ 쿠폰·이벤트</a><a href="#">📈 광고 성과</a>
+    <small>설정</small>
+    <a href="#">⚙️ 스토어 설정</a>
+    <div class="me"><div class="av"></div><div><b style="color:#fff">관리자</b><br><span style="font-size:12px">admin@mono.kr</span></div></div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div><h1>대시보드</h1><p>2026년 10월 28일 기준 · 이번 달 운영 현황</p></div>
+      <div class="r"><select><option>최근 6개월</option><option>최근 30일</option></select><a class="btn p" href="#">보고서 내려받기</a></div>
+    </div>
+    <div class="kpis"><div class="card kpi"><div class="lab">총 매출</div><div class="val">6,080만 원</div><span class="up">▲ 16.3%</span> <span class="vs">지난달 대비</span></div><div class="card kpi"><div class="lab">주문 수</div><div class="val">1,842건</div><span class="up">▲ 11.0%</span> <span class="vs">지난달 대비</span></div><div class="card kpi"><div class="lab">신규 고객</div><div class="val">512명</div><span class="down">▼ 6.6%</span> <span class="vs">지난달 대비</span></div><div class="card kpi"><div class="lab">평균 주문 금액</div><div class="val">33,008원</div><span class="up">▲ 4.8%</span> <span class="vs">지난달 대비</span></div></div>
+    <div class="row">
+      <div class="card"><h3>월별 매출</h3><div class="hint">단위: 만 원</div>
+        <div class="chart"><div class="col"><em>3,820</em><i style="height:55.3%"></i></div><div class="col"><em>4,150</em><i style="height:60.1%"></i></div><div class="col"><em>3,960</em><i style="height:57.3%"></i></div><div class="col"><em>4,710</em><i style="height:68.2%"></i></div><div class="col"><em>5,230</em><i style="height:75.7%"></i></div><div class="col last"><em>6,080</em><i style="height:88.0%"></i></div></div><div class="months"><span>5월</span><span>6월</span><span>7월</span><span>8월</span><span>9월</span><span>10월</span></div></div>
+      <div class="card"><h3>판매 채널 비중</h3><div class="hint">이번 달 매출 기준</div>
+        <div class="donut" style="background:conic-gradient(#2563eb 0.0% 45.9%, #60a5fa 45.9% 72.4%, #a78bfa 72.4% 90.6%, #cbd5e1 90.6% 100.0%)"><b>총 매출<br>6,080만 원</b></div>
+        <ul class="legend"><li><span><i style="background:#2563eb"></i>자사몰</span><b>45.9%</b></li><li><span><i style="background:#60a5fa"></i>오픈마켓</span><b>26.5%</b></li><li><span><i style="background:#a78bfa"></i>앱</span><b>18.3%</b></li><li><span><i style="background:#cbd5e1"></i>오프라인</span><b>9.4%</b></li></ul></div>
+    </div>
+    <div class="card"><h3>최근 주문</h3><div class="hint">최근 들어온 주문 5건</div>
+      <table><thead><tr><th>주문 번호</th><th>고객</th><th>상품</th><th style="text-align:right">결제 금액</th><th>상태</th></tr></thead>
+      <tbody><tr><td>#20261028-0142</td><td>김민수</td><td>울 블렌드 오버핏 코트</td><td class="num">202,300원</td><td><span class="pill ok">결제 완료</span></td></tr><tr><td>#20261028-0141</td><td>이지은</td><td>헤비 코튼 스웨트셔츠 외 1건</td><td class="num">109,300원</td><td><span class="pill ship">배송 중</span></td></tr><tr><td>#20261028-0139</td><td>박준호</td><td>클래식 레더 스니커즈</td><td class="num">100,600원</td><td><span class="pill wait">입금 대기</span></td></tr><tr><td>#20261027-0388</td><td>최서연</td><td>캐시미어 머플러</td><td class="num">58,800원</td><td><span class="pill ship">배송 중</span></td></tr><tr><td>#20261027-0377</td><td>정우진</td><td>나일론 데일리 백팩</td><td class="num">80,100원</td><td><span class="pill cancel">취소</span></td></tr></tbody></table></div>
+  </main>
+</div>
+
+<a class="__back" href="index.html">← 전체 템플릿</a>
+</body>
+</html>

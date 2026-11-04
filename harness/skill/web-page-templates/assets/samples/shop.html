@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>monomarket — 쇼핑몰 홈 샘플</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button,input,select,textarea{font:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.__back{position:fixed;right:16px;bottom:16px;z-index:999;background:#111;color:#fff;
+  font-size:13px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+
+body{color:#111;background:#fff}
+.notice{background:#111;color:#fff;text-align:center;font-size:13px;padding:8px}
+header .wrap{display:flex;align-items:center;gap:32px;height:76px}
+.logo{font-size:26px;font-weight:900;letter-spacing:-1.5px}
+.search{flex:1;max-width:440px;display:flex;border:2px solid #111;border-radius:999px;overflow:hidden}
+.search input{flex:1;border:0;padding:10px 18px;font-size:14px;outline:0;min-width:0}
+.search button{border:0;background:#111;color:#fff;padding:0 22px;font-weight:600;cursor:pointer}
+.util{margin-left:auto;display:flex;gap:22px;font-size:14px;color:#444}
+.cats{border-top:1px solid #eee;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:5}
+.cats .wrap{display:flex;gap:30px;height:50px;align-items:center;font-size:15px;font-weight:600;overflow-x:auto;white-space:nowrap}
+.cats .sale{color:#e11d48}
+.banner{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:24px}
+.bn{border-radius:18px;padding:40px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;min-height:380px}
+.bn.main{background:linear-gradient(135deg,#334155 0%,#94a3b8 100%)}
+.bn.sub{background:linear-gradient(160deg,#f59e0b,#e11d48)}
+.bn small{opacity:.85;font-weight:600}
+.bn h2{font-size:36px;line-height:1.25;margin:8px 0 18px;letter-spacing:-1px}
+.bn.sub h2{font-size:28px}
+.bn .more{font-size:14px;font-weight:600;border-bottom:1px solid #fff;align-self:flex-start}
+.circles{display:grid;grid-template-columns:repeat(8,1fr);gap:14px;text-align:center;margin-top:44px;font-size:14px;font-weight:500}
+.circle{aspect-ratio:1;border-radius:50%;margin-bottom:8px;display:grid;place-items:center;font-size:30px;background:#f4f4f5}
+.sec-head{display:flex;justify-content:space-between;align-items:end;margin:56px 0 20px}
+.sec-head h3{font-size:23px;letter-spacing:-.5px}
+.sec-head p{font-size:14px;color:#888}
+.sec-head a{font-size:14px;color:#777}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:32px 16px}
+.thumb{aspect-ratio:3/4;border-radius:10px;position:relative;margin-bottom:12px;overflow:hidden}
+.thumb .rank{position:absolute;top:0;left:0;background:#111;color:#fff;font-weight:800;font-size:14px;width:30px;height:30px;display:grid;place-items:center}
+.tag{position:absolute;bottom:10px;left:10px;background:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
+.heart{position:absolute;bottom:10px;right:12px;color:#fff;font-size:20px}
+.brand{font-size:13px;font-weight:700}
+.name{font-size:14px;color:#444;margin:2px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dc{color:#e11d48;font-weight:800;margin-right:6px}
+.now{font-weight:800}
+.orig{font-size:13px;color:#aaa;text-decoration:line-through;margin-left:6px}
+.meta{font-size:12px;color:#999;margin-top:4px}
+.benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:64px}
+.benefit{background:#f5f5f4;border-radius:14px;padding:22px}
+.benefit b{display:block;font-size:16px;margin-bottom:4px}
+.benefit span{font-size:14px;color:#666}
+footer{background:#f7f7f7;padding:44px 0;font-size:13px;color:#888;margin-top:72px}
+footer b{color:#333;font-size:15px;display:block;margin-bottom:8px}
+@media(max-width:820px){.banner{grid-template-columns:1fr}.circles{grid-template-columns:repeat(4,1fr)}.util{display:none}}
+</style>
+</head>
+<body>
+
+<div class="notice">신규 가입 시 15% 할인 쿠폰 즉시 지급 · 5만 원 이상 구매 시 무료배송</div>
+<header><div class="wrap">
+  <div class="logo">monomarket</div>
+  <form class="search" action="#"><input placeholder="브랜드, 상품명을 검색해 보세요"><button type="button">검색</button></form>
+  <div class="util"><a href="#">로그인</a><a href="#">마이페이지</a><a href="#">장바구니 (2)</a></div>
+</div></header>
+<nav class="cats"><div class="wrap">
+  <a href="#">랭킹</a><a href="#">신상품</a><a href="#">여성</a><a href="#">남성</a><a href="#">신발</a>
+  <a href="#">가방</a><a href="#">리빙</a><a href="#">브랜드</a><a class="sale" href="#">시즌오프 SALE</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="banner">
+    <a class="bn main" href="#"><small>26 F/W COLLECTION</small><h2>겨울을 준비하는<br>아우터 기획전</h2><span class="more">최대 40% 할인 보러 가기</span></a>
+    <a class="bn sub" href="#"><small>오늘만 특가</small><h2>타임세일<br>최대 50%</h2><span class="more">지금 확인하기</span></a>
+  </div>
+
+  <div class="circles"><a href="#"><div class="circle">👕</div>상의</a><a href="#"><div class="circle">👖</div>하의</a><a href="#"><div class="circle">🧥</div>아우터</a><a href="#"><div class="circle">👟</div>신발</a><a href="#"><div class="circle">👜</div>가방</a><a href="#"><div class="circle">⌚</div>액세서리</a><a href="#"><div class="circle">🛋️</div>리빙</a><a href="#"><div class="circle">🧴</div>뷰티</a></div>
+
+  <div class="sec-head"><div><h3>실시간 랭킹</h3><p>리뷰가 가장 많은 상품</p></div><a href="#">전체 보기 →</a></div>
+  <div class="products"><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#cbd5e1,#64748b)"><span class="rank">1</span><span class="tag">무료배송</span><span class="heart">♡</span></div><div class="brand">MONO BASIC</div><div class="name">헤비 코튼 스웨트셔츠</div><div><span class="dc">15%</span><span class="now">50,200원</span><span class="orig">59,000원</span></div><div class="meta">★ 4.6 · 리뷰 3,921</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#e7e5e4,#78716c)"><span class="rank">2</span><span class="tag">베스트</span><span class="heart">♡</span></div><div class="brand">MONO BASIC</div><div class="name">램스울 라운드 니트</div><div><span class="dc">20%</span><span class="now">55,200원</span><span class="orig">69,000원</span></div><div class="meta">★ 4.9 · 리뷰 2,754</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#fde68a,#b45309)"><span class="rank">3</span><span class="tag">베스트</span><span class="heart">♡</span></div><div class="brand">SOFTSTEP</div><div class="name">클래식 레더 스니커즈</div><div><span class="dc">22%</span><span class="now">100,600원</span><span class="orig">129,000원</span></div><div class="meta">★ 4.5 · 리뷰 2,210</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#bbf7d0,#166534)"><span class="rank">4</span><span class="tag">무료배송</span><span class="heart">♡</span></div><div class="brand">CARRY ON</div><div class="name">나일론 데일리 백팩</div><div><span class="dc">10%</span><span class="now">80,100원</span><span class="orig">89,000원</span></div><div class="meta">★ 4.7 · 리뷰 1,677</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#a8a29e,#57534e)"><span class="rank">5</span><span class="tag">단독</span><span class="heart">♡</span></div><div class="brand">LOWFIELD</div><div class="name">울 블렌드 오버핏 코트</div><div><span class="dc">30%</span><span class="now">202,300원</span><span class="orig">289,000원</span></div><div class="meta">★ 4.9 · 리뷰 1,284</div></a></div>
+
+  <div class="sec-head"><div><h3>시즌오프 SALE</h3><p>20% 이상 할인 상품만 모았습니다</p></div><a href="#">전체 보기 →</a></div>
+  <div class="products"><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#fecaca,#b91c1c)"><span class="tag">시즌오프</span><span class="heart">♡</span></div><div class="brand">NORDIK</div><div class="name">캐시미어 머플러</div><div><span class="dc">40%</span><span class="now">58,800원</span><span class="orig">98,000원</span></div><div class="meta">★ 4.7 · 리뷰 512</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#a8a29e,#57534e)"><span class="tag">단독</span><span class="heart">♡</span></div><div class="brand">LOWFIELD</div><div class="name">울 블렌드 오버핏 코트</div><div><span class="dc">30%</span><span class="now">202,300원</span><span class="orig">289,000원</span></div><div class="meta">★ 4.9 · 리뷰 1,284</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#ddd6fe,#5b21b6)"><span class="tag">단독</span><span class="heart">♡</span></div><div class="brand">LOWFIELD</div><div class="name">퀼팅 경량 패딩 조끼</div><div><span class="dc">25%</span><span class="now">89,200원</span><span class="orig">119,000원</span></div><div class="meta">★ 4.5 · 리뷰 905</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#fde68a,#b45309)"><span class="tag">베스트</span><span class="heart">♡</span></div><div class="brand">SOFTSTEP</div><div class="name">클래식 레더 스니커즈</div><div><span class="dc">22%</span><span class="now">100,600원</span><span class="orig">129,000원</span></div><div class="meta">★ 4.5 · 리뷰 2,210</div></a><a class="item" href="#"><div class="thumb" style="background:linear-gradient(160deg,#e7e5e4,#78716c)"><span class="tag">베스트</span><span class="heart">♡</span></div><div class="brand">MONO BASIC</div><div class="name">램스울 라운드 니트</div><div><span class="dc">20%</span><span class="now">55,200원</span><span class="orig">69,000원</span></div><div class="meta">★ 4.9 · 리뷰 2,754</div></a></div>
+
+  <div class="benefits">
+    <div class="benefit"><b>🚚 오늘 출발</b><span>오후 2시 전 주문은 당일 발송합니다.</span></div>
+    <div class="benefit"><b>↩️ 무료 반품</b><span>받은 날로부터 7일 안에 무료로 반품할 수 있습니다.</span></div>
+    <div class="benefit"><b>✅ 정품 보증</b><span>모든 상품은 브랜드 공식 유통 상품입니다.</span></div>
+    <div class="benefit"><b>💳 적립금 5%</b><span>구매 확정 후 결제 금액의 5%를 적립합니다.</span></div>
+  </div>
+</main>
+
+<footer><div class="wrap">
+  <b>monomarket</b>
+  (주)모노마켓 · 대표 홍길동 · 사업자등록번호 000-00-00000 · 통신판매업 신고 제0000-서울-0000호<br>
+  고객센터 1588-0000 (평일 10:00–18:00) · 이용약관 · 개인정보처리방침<br>
+  ※ 이 페이지는 템플릿 샘플이며, 회사 정보는 모두 가상의 정보입니다.
+</div></footer>
+
+<a class="__back" href="index.html">← 전체 템플릿</a>
+</body>
+</html>

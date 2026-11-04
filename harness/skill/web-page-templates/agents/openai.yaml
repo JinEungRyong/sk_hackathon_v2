@@ -1,0 +1,6 @@
+interface:
+  display_name: "웹 페이지 유형별 템플릿"
+  short_description: "랜딩·쇼핑몰·기업·포트폴리오·블로그·이벤트·대시보드 홈 화면을 HTML+CSS+Python으로 생성"
+  default_prompt: "$web-page-templates 로 쇼핑몰 홈 화면을 만들어 줘. 브랜드 이름은 '숲마켓', 친환경 생활용품을 판매해."
+policy:
+  allow_implicit_invocation: false
