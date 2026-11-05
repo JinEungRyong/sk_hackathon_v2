@@ -15,6 +15,8 @@ UX 검증 세션이다. ux-ui-audit-hackathon 스킬로 검수해. 시험용 계
 ~/.codex/config.toml에 TUI 알림을 켜 두면, 세션이 작업을 마치거나 승인을 기다릴 때 터미널 알림이 옵니다.
 
 toml
+
+
 [tui]
 notifications = ["agent-turn-complete", "approval-requested"]
 notification_method = "osc9"   # iTerm2, VS Code 터미널 등에서 사용
